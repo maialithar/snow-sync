@@ -1,0 +1,51 @@
+{
+    "name": "snow-sync",
+    "displayName": "SNOW Sync",
+    "description": "Script synchronization for ServiceNow instance",
+    "version": "0.1.0",
+    "publisher": "elali",
+    "engines": {
+        "vscode": "^1.13.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "snow", "servicenow", "script sync"
+    ],
+    "preview": true,
+    "activationEvents": [
+        "onCommand:snow_sync.control.start"
+    ],
+    "main": "./src/snow_sync",
+    "contributes": {
+        "commands": [
+            {
+                "command": "snow_sync.control.start",
+                "title": "SNOW Sync: Start working"
+            },
+            {
+                "command": "snow_sync.settings.show_settings",
+                "title": "SNOW Sync: Show settings"
+            },
+            {
+                "command": "snow_sync.script.get_script",
+                "title": "SNOW Sync: Get script"
+            }
+        ]
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.0.3",
+        "vscode": "^1.0.0",
+        "mocha": "^2.3.3",
+        "eslint": "^3.6.0",
+        "nconf": "^0.8.4",
+        "mkdirp": "^0.5.1",
+        "@types/node": "^6.0.40",
+        "@types/mocha": "^2.2.32"
+    }
+}
