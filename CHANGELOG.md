@@ -16,3 +16,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   - `SNOW Sync: Show settings`
   - `SNOW Sync: Get script`
 - `onWillSaveTextDocument` event that takes care of updating script from your disk to your instance
+- For business rules and client scripts, you may give additional parameter - table name. If given, scripts for only that table will be loaded
+- Status bar message shows script count

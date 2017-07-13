@@ -19,17 +19,23 @@ function show_script_picker(type, fields = 'name,sys_id') {
         return;
     }
     control.set_status_message('$(radio-tower) Loading all scripts from ' + type + ' table...');
-    connection.get_all_scripts(type, fields)
-        .then((res_json) => {
-            var script_names = res_json.result.map((single_script) => { return single_script.name;});
-            control.set_status_message('$(thumbsup) Scripts loaded.');
-            vscode.window.showQuickPick(script_names)
-                .then(chosen_script => load_script(type, chosen_script, (res_json.result.map((single_script) => {return single_script.name == chosen_script ? single_script.sys_id : 1;}).sort())[0]));
-        })
-        .catch((rejected_reason) => {
-            control.set_status_message('$(alert) Failed to load all scripts!');
-            vscode.window.showErrorMessage('Couldn\'t get all scripts: ' + rejected_reason);  
+    if (type == 'Business Rule' || type == 'Client Script'){
+        vscode.window.showInputBox({
+            prompt: 'Enter name of the table for which you would like to see chosen scripts.'
+        }).then((table_name) => {
+            connection.get_all_scripts(type, table_name, fields)
+                .then((res_json) => {
+                    var script_names = res_json.result.map((single_script) => { return single_script.name;});
+                    control.set_status_message('$(thumbsup) ' + script_names.length + ' scripts loaded.');
+                    vscode.window.showQuickPick(script_names)
+                        .then(chosen_script => load_script(type, chosen_script, (res_json.result.map((single_script) => {return single_script.name == chosen_script ? single_script.sys_id : 1;}).sort())[0]));
+                })
+                .catch((rejected_reason) => {
+                    control.set_status_message('$(alert) Failed to load all scripts!');
+                    vscode.window.showErrorMessage('Couldn\'t get all scripts: ' + rejected_reason);  
+                });
         });
+    }
 }
 
 function load_script(type, name, sys_id){
