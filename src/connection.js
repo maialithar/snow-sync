@@ -6,7 +6,12 @@ const password = settings.get('password');
 const instance = settings.get('instance');
 const script_table = {
     'Business Rule': 'sys_script',
-    'Client Script': 'sys_script_client'
+    'Client Script': 'sys_script_client',
+    'Script Include': 'sys_script_include',
+    'Fix Script': 'sys_script_fix',
+    'Validation Scipt': 'sys_script_validator',
+    'Notification Email Scripts': 'sys_script_email',
+    'UI Script': 'sys_ui_script'
 }
 
 var url = instance + '.service-now.com';
