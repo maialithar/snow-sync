@@ -32,6 +32,9 @@ function load_settings(){
     username = settings.get('username');
     password = settings.get('password');
     instance = settings.get('instance');
+    url = instance + '.service-now.com';
+    options.hostname = url;
+    options.auth = username + ':' + password;
 }
 
 function get_all_scripts(type, table_name = undefined, fields = 'name,sys_id'){
@@ -81,6 +84,38 @@ function get_one_script(type, name, sys_id){
         options.method = 'GET';
 
         load_settings();
+        console.log(options);
+        var req = https.request(options, (res) => {
+            if (res.statusCode == '200'){
+                res.setEncoding('utf8');
+                res.on('data', (chunk) => {
+                    res_string += chunk;
+                    console.log(chunk);
+                });
+                res.on('end', () => {
+                    res_json = JSON.parse(res_string);
+                    resolve(res_json);
+                });
+            }
+        });
+
+        req.on('error', (e) => {
+            console.error(`Problem with request: ${e.message}`);
+            reject(e.message);
+        });
+
+        req.end();
+    });
+};
+
+function get_script_config(type, name, sys_id, fields) {
+    return new Promise((resolve, reject) => {
+        var res_string = '';
+        var res_json = {};
+        options.path = '/api/now/table/' + script_table[type] + '?sysparm_query=sys_id%3D' + sys_id + '&sysparm_fields=' + fields;
+        options.method = 'GET';
+
+        load_settings();
         var req = https.request(options, (res) => {
             if (res.statusCode == '200'){
                 res.setEncoding('utf8');
@@ -101,7 +136,7 @@ function get_one_script(type, name, sys_id){
 
         req.end();
     });
-};
+}
 
 function put_script(type, sys_id, script){
     return new Promise((resolve, reject) => {

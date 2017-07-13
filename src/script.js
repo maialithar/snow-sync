@@ -28,7 +28,7 @@ function show_script_picker(type, fields = 'name,sys_id') {
                     var script_names = res_json.result.map((single_script) => { return single_script.name;});
                     control.set_status_message('$(thumbsup) ' + script_names.length + ' scripts loaded.');
                     vscode.window.showQuickPick(script_names)
-                        .then(chosen_script => load_script(type, chosen_script, (res_json.result.map((single_script) => {return single_script.name == chosen_script ? single_script.sys_id : 1;}).sort())[0]));
+                        .then(chosen_script => load_script(type, chosen_script, (res_json.result.map((single_script) => {return single_script.name == chosen_script ? single_script.sys_id : 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz';}).sort())[0]));
                 })
                 .catch((rejected_reason) => {
                     control.set_status_message('$(alert) Failed to load all scripts!');
@@ -64,28 +64,40 @@ function load_script(type, name, sys_id){
     connection.get_one_script(type, name, sys_id)
         .then((res_json) => {
             control.set_status_message('$(thumbsup) Script loaded.');
-            fs.writeFile(file_name, res_json.result[0].script, 'utf8', (err) => {
-                if (err) {
-                    vscode.window.showErrorMessage('I can\'t write a script file!');
-                    return;
-                }
-                vscode.workspace.openTextDocument(file_name).then((doc) => {
-                    vscode.window.showTextDocument(doc);
-                    vscode.workspace.onWillSaveTextDocument((event) => {
-                        if (vscode.window.activeTextEditor.document.fileName.endsWith('.snow_sync.js')){
-                            connection.put_script(type, sys_id, vscode.window.activeTextEditor.document.getText())
-                                .then(() => {
-                                    vscode.window.showInformationMessage('Script succesfully updated on server.');
-                                    control.set_status_message('$(thumbsup) Script updated on instance.');
-                                })
-                                .catch((rejected_reason) => {
-                                    vscode.window.showErrorMessage('Problem with request: ' + rejected_reason);
-                                    control.set_status_message('$(alert) Failed to update script on instance!');
-                                });
-                        }
+            console.log(res_json);
+            if (res_json.result.length > 0){
+                fs.writeFile(file_name, res_json.result[0].script, 'utf8', (err) => {
+                    if (err) {
+                        vscode.window.showErrorMessage('I can\'t write a script file!');
+                        return;
+                    }
+                    switch (type){
+                        case 'Business Rule':
+                            console.log(vscode.workspace.getConfiguration('snow_sync.properties').get('snow_sync.business_rule_fields'));
+                            break;
+                        default:
+                            break;
+                    }
+                    vscode.workspace.openTextDocument(file_name).then((doc) => {
+                        vscode.window.showTextDocument(doc);
+                        vscode.workspace.onWillSaveTextDocument((event) => {
+                            if (vscode.window.activeTextEditor.document.fileName.endsWith('.snow_sync.js')){
+                                connection.put_script(type, sys_id, vscode.window.activeTextEditor.document.getText())
+                                    .then(() => {
+                                        vscode.window.showInformationMessage('Script succesfully updated on server.');
+                                        control.set_status_message('$(thumbsup) Script updated on instance.');
+                                    })
+                                    .catch((rejected_reason) => {
+                                        vscode.window.showErrorMessage('Problem with request: ' + rejected_reason);
+                                        control.set_status_message('$(alert) Failed to update script on instance!');
+                                    });
+                            }
+                        });
                     });
                 });
-            });
+            } else {
+
+            }
         })
         .catch((rejected_reason) => {
             vscode.window.showErrorMessage('Couldn\'t get single script: ' + rejected_reason);  

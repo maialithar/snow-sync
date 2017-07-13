@@ -32,7 +32,18 @@
                 "command": "snow_sync.script.get_script",
                 "title": "SNOW Sync: Get script"
             }
-        ]
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "SNOW Sync configuration",
+            "properties": {
+                "snow_sync.business_rule_fields": {
+                    "type": "string",
+                    "default": "name",
+                    "description": "Fields to load along with script. They will be saved in separate config file."
+                }
+            }
+        }
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",

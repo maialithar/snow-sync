@@ -8,6 +8,7 @@ function activate(context) {
     context.subscriptions.push(settings_comm);
     context.subscriptions.push(connection_comm);
     context.subscriptions.push(start_comm);
+    
 }
 
 function deactivate() {}
