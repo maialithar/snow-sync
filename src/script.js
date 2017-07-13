@@ -26,9 +26,15 @@ function show_script_picker(type, fields = 'name,sys_id') {
             connection.get_all_scripts(type, table_name, fields)
                 .then((res_json) => {
                     var script_names = res_json.result.map((single_script) => { return single_script.name;});
+                    var script_names_sysids = {};
+
+                    res_json.result.forEach((single_script) => {
+                        script_names_sysids[single_script.name] = single_script.sys_id;
+                    }, this);
+
                     control.set_status_message('$(thumbsup) ' + script_names.length + ' scripts loaded.');
                     vscode.window.showQuickPick(script_names)
-                        .then(chosen_script => load_script(type, chosen_script, (res_json.result.map((single_script) => {return single_script.name == chosen_script ? single_script.sys_id : 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz';}).sort())[0]));
+                        .then(chosen_script => load_script(type, chosen_script, script_names_sysids[chosen_script]));
                 })
                 .catch((rejected_reason) => {
                     control.set_status_message('$(alert) Failed to load all scripts!');
@@ -64,19 +70,11 @@ function load_script(type, name, sys_id){
     connection.get_one_script(type, name, sys_id)
         .then((res_json) => {
             control.set_status_message('$(thumbsup) Script loaded.');
-            console.log(res_json);
             if (res_json.result.length > 0){
                 fs.writeFile(file_name, res_json.result[0].script, 'utf8', (err) => {
                     if (err) {
                         vscode.window.showErrorMessage('I can\'t write a script file!');
                         return;
-                    }
-                    switch (type){
-                        case 'Business Rule':
-                            console.log(vscode.workspace.getConfiguration('snow_sync.properties').get('snow_sync.business_rule_fields'));
-                            break;
-                        default:
-                            break;
                     }
                     vscode.workspace.openTextDocument(file_name).then((doc) => {
                         vscode.window.showTextDocument(doc);
@@ -95,6 +93,15 @@ function load_script(type, name, sys_id){
                         });
                     });
                 });
+                var fields_to_load = '';
+                switch (type){
+                    case 'Business Rule':
+                        fields_to_load = vscode.workspace.getConfiguration('snow_sync').get('business_rule_fields');
+                        break;
+                    default:
+                        break;
+                }
+                //connection.get_script_config()
             } else {
 
             }

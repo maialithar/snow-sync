@@ -84,13 +84,11 @@ function get_one_script(type, name, sys_id){
         options.method = 'GET';
 
         load_settings();
-        console.log(options);
         var req = https.request(options, (res) => {
             if (res.statusCode == '200'){
                 res.setEncoding('utf8');
                 res.on('data', (chunk) => {
                     res_string += chunk;
-                    console.log(chunk);
                 });
                 res.on('end', () => {
                     res_json = JSON.parse(res_string);
@@ -166,3 +164,4 @@ exports.get_all_scripts = get_all_scripts;
 exports.get_one_script = get_one_script;
 exports.put_script = put_script;
 exports.get_script_types = get_script_types;
+exports.get_script_config = get_script_config;
