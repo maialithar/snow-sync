@@ -39,7 +39,7 @@
             "properties": {
                 "snow_sync.business_rule_fields": {
                     "type": "string",
-                    "default": "name",
+                    "default": "name,sys_id,table,active,when,filter_condition,role_conditions,condition,action_insert,action_update,action_delete,action_query",
                     "description": "Fields to load along with script. They will be saved in separate config file."
                 }
             }

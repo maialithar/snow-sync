@@ -3,7 +3,6 @@ const script_table = {
     'Client Script': 'sys_script_client',
     'Script Include': 'sys_script_include',
     'Fix Script': 'sys_script_fix',
-    'Validation Scipt': 'sys_script_validator',
     'Notification Email Scripts': 'sys_script_email',
     'UI Script': 'sys_ui_script'
 }
@@ -118,7 +117,6 @@ function get_script_config(type, name, sys_id, fields) {
                 res.setEncoding('utf8');
                 res.on('data', (chunk) => {
                     res_string += chunk;
-                    console.log('body: ' + chunk);
                 });
                 res.on('end', () => {
                     res_json = JSON.parse(res_string);

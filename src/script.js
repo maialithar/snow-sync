@@ -21,20 +21,23 @@ function show_script_picker(type, fields = 'name,sys_id') {
         vscode.window.showInformationMessage('No script type chosen.');
         return;
     }
-    var promise_all_scripts = '';
 
     control.set_status_message('$(radio-tower) Loading all scripts from ' + type + ' table...');
     if (type == 'Business Rule' || type == 'Client Script'){
         vscode.window.showInputBox({
             prompt: 'Enter name of the table for which you would like to see chosen scripts.'
         }).then((table_name) => {
-            promise_all_scripts = connection.get_all_scripts(type, table_name, fields);
+            _load_scripts(type, connection.get_all_scripts(type, table_name, fields));
         });
     } else {
-        promise_all_scripts = connection.get_all_scripts(type, undefined, fields);
+        _load_scripts(type, connection.get_all_scripts(type, undefined, fields));
     }
 
-    promise_all_scripts
+    
+}
+
+function _load_scripts(type, promise){
+    promise
         .then((res_json) => {
             var script_names = res_json.result.map((single_script) => { return single_script.name;});
             var script_names_sysids = {};
@@ -72,7 +75,7 @@ function load_script(type, name, sys_id){
     if (script_config.get().length === undefined){
         script_config.set('table', connection.get_script_table(type));
         script_config.set('script_field', 'script');
-        script_config.set('fields_to_load_for_conf', (vscode.workspace.getConfiguration('snow_sync').get(type.toLowerCase().replace(/\s/g, '_') + '_fields')) || 'name');
+        script_config.set('fields_to_load_for_conf', (vscode.workspace.getConfiguration('snow_sync').get(type.toLowerCase().replace(/\s/g, '_') + '_fields')) || 'name,sys_id');
         script_config.save();
     }
 
@@ -105,7 +108,19 @@ function load_script(type, name, sys_id){
                 var fields_to_load = script_config.get('fields_to_load_for_conf');
                 connection.get_script_config(type, name, sys_id, fields_to_load)
                     .then((res_json) => {
-                        console.log(res_json);
+                        var single_script_config_file = file_name.replace('.snow_sync.js', 'snow_sync.json')
+                        nconf.file('single_script', single_script_config_file);
+                        var single_script_config = nconf.stores.single_script;
+                        var keys = fields_to_load.split(',');
+
+                        keys.forEach((key) => {
+                            single_script_config.set(key, res_json.result[0][key]);
+                        });
+                        single_script_config.save();
+                        
+                        vscode.workspace.openTextDocument(single_script_config_file).then((doc) => {
+                            vscode.window.showTextDocument(doc, vscode.window.activeTextEditor.viewColumn + 1, true);
+                        });
                     })
                     .catch((rejected_reason) => {
                         console.log(rejected_reason);
