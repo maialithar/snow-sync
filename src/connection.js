@@ -39,7 +39,6 @@ function load_settings(){
 
 function get_all_scripts(type, table_name = undefined, fields = 'name,sys_id'){
     return new Promise((resolve, reject) => {
-        
         var res_string = '';
         var res_json = {};
 
@@ -119,6 +118,7 @@ function get_script_config(type, name, sys_id, fields) {
                 res.setEncoding('utf8');
                 res.on('data', (chunk) => {
                     res_string += chunk;
+                    console.log('body: ' + chunk);
                 });
                 res.on('end', () => {
                     res_json = JSON.parse(res_string);
@@ -160,8 +160,13 @@ function get_script_types(){
     return Object.keys(script_table);
 }
 
+function get_script_table(type){
+    return script_table[type];
+}
+
 exports.get_all_scripts = get_all_scripts;
 exports.get_one_script = get_one_script;
 exports.put_script = put_script;
 exports.get_script_types = get_script_types;
 exports.get_script_config = get_script_config;
+exports.get_script_table = get_script_table;

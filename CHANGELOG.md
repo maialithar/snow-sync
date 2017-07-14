@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.1] - 2017-07-14
+### Added
+- Another config file for every script type will be created/loaded upon script download. It will contain some basic information that you will be also able to upload soon in the future.
+
+### Fixed
+- Finally fixed a problem with script not getting loaded. It should load every time
+
 ## [0.1.0] - 2017-07-13
 - Initial release
 

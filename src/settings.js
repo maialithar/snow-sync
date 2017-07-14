@@ -10,6 +10,7 @@ var mkdirp = require('mkdirp');
 var fs = require('fs');
 var settings_path = require('os').homedir() + path.sep + '.snow_sync';
 var settings_file = 'settings.conf';
+var settings_conf = nconf.stores.settings;
 
 function load_settings(cb = null){
     fs.stat(settings_path, (err) => {
@@ -18,7 +19,8 @@ function load_settings(cb = null){
                 if (err2)
                     vscode.window.showErrorMessage('Cannot create settings directory, please check permissions to your home dir!');
             });
-        nconf.file(settings_path + path.sep + settings_file);
+        nconf.file('settings', settings_path + path.sep + settings_file);
+        settings_conf = nconf.stores.settings;
         if (cb) cb();
     });
 }
@@ -37,20 +39,20 @@ function save_new_setting(setting){
     }
     vscode.window.showInputBox({
         prompt: 'Enter new value for "' + setting + '" configuration item.',
-        value: nconf.get(setting)
+        value: settings_conf.get(setting)
     }).then((new_value) => {
         if (new_value === undefined || new_value == ''){
             vscode.window.showInformationMessage('No new value for "' + setting + '" configuration item provided, nothing saved.');
             return;
         }
 
-        nconf.set(setting, new_value);
-        nconf.save();
+        settings_conf.set(setting, new_value);
+        settings_conf.save();
 
-        if (nconf.get(settings_ROOT_DIR) && nconf.get(settings_INSTANCE) && setting == settings_INSTANCE){
-            fs.stat(nconf.get(settings_ROOT_DIR) + path.sep + nconf.get(settings_INSTANCE), (err) => {
+        if (settings_conf.get(settings_ROOT_DIR) && settings_conf.get(settings_INSTANCE) && setting == settings_INSTANCE){
+            fs.stat(settings_conf.get(settings_ROOT_DIR) + path.sep + settings_conf.get(settings_INSTANCE), (err) => {
                 if (err)
-                    mkdirp(nconf.get(settings_ROOT_DIR) + path.sep + nconf.get(settings_INSTANCE), (err2) => {
+                    mkdirp(settings_conf.get(settings_ROOT_DIR) + path.sep + settings_conf.get(settings_INSTANCE), (err2) => {
                         if (err2)
                             vscode.window.showErrorMessage('Cannot create project directory, please check permissions to your root project dir!');
                     });
@@ -61,9 +63,11 @@ function save_new_setting(setting){
 
 function get(what){
     load_settings();
-    if (nconf.get() === undefined) 
-        nconf.file(settings_path + path.sep + settings_file);
-    return nconf.get(what);
+    if (settings_conf === undefined){
+        nconf.file('settings', settings_path + path.sep + settings_file);
+        settings_conf = nconf.stores.settings;
+    }
+    return settings_conf.get(what);
 }
 
 exports.show_settings = show_settings;
