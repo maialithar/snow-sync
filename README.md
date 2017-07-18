@@ -18,6 +18,8 @@ This extension is not yet published in marketplace. In order to use it, simply:
 1. Copy/download this repository and save it to `HOME DIRECTORY/.vscode/extensions`
 2. Restart `Visual Studio Code`
 
+You can also download a `vsix` file from this repository and [install it directly in your IDE](https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix).
+
 ## Usage
 
 1. Run `SNOW Sync: Start work` command
@@ -59,7 +61,6 @@ This extensions allows you to download chosen script (currently supports busines
 ## Known Issues
 
 - It fails to load scripts when given instance has domain name
-- Sometimes script fails to load
 - No multiple instances
 - It doesn't check for permissions
 
