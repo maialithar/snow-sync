@@ -167,8 +167,6 @@ function put_config(table, sys_id, config){
         options.method = 'PUT';
 
         load_settings();
-        console.log(options);
-        console.log(config);
         var req = https.request(options);
 
         req.on('error', (e) => {
