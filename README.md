@@ -50,8 +50,13 @@ You can also download a `vsix` file from this repository and [install it directl
 
 This extensions allows you to download chosen script (currently supports business rules, client scripts, script includes, fix scripts, email notification scripts and ui scripts) and display it in `Visual Studio Code` IDE. You can modify it and once saved, it will be uploaded to you instance directly. You can also modify some configuration options - they will also be uploaded on save.
 
-#### TODO: 
-- describe configuration contributions
+### Configuration options 
+This extension comes with additional configuration options for every script that can be chosen. You can select which fields will be downloaded and saved to script config file. How to change them?
+
+1. Open settings panel (`Ctrl + comma`)
+2. Search for `snow` - all settings are prefixed with `snow_sync`
+3. Click on pencil that appears on the left side of the editor when you hover over chosen setting - it will be copied to your personal setting file (_User settings_)
+4. Change the value - it should be a string with comma-separated column names from selected table, i.e. when you change the `snow_sync.fix_script_fields` setting, include only columns from Fix Script table
 
 ## Requirements
 
