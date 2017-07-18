@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.0] - 2017-07-18
+### Changed
+- extensions will now be active after startup, no need to activate it via command
+
+### Removed
+- `SNOW Sync: Start working` command
+
 ## [0.2.0] - 2017-07-18
 ### Added
 - New configuration options for `vscode`: `snow_sync.client_script_fields` and `snow_sync.fix_script_fields`
