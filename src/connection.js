@@ -134,12 +134,15 @@ function get_script_config(type, name, sys_id, fields) {
     });
 }
 
-function put_script(type, sys_id, script){
+function put_script(table, sys_id, script){
     return new Promise((resolve, reject) => {
+        if (table === undefined || sys_id === undefined){
+            reject('There is a problem with either table name or sys_id!');
+        }
         var put_me = {
             'script': script
         }
-        options.path = '/api/now/table/' + script_table[type] + '/' + sys_id;
+        options.path = '/api/now/table/' + table + '/' + sys_id;
         options.method = 'PUT';
 
         load_settings();

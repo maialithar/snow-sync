@@ -27,16 +27,16 @@ function show_script_picker(type, fields = 'name,sys_id') {
         vscode.window.showInputBox({
             prompt: 'Enter name of the table for which you would like to see chosen scripts.'
         }).then((table_name) => {
-            _load_scripts(type, connection.get_all_scripts(type, table_name, fields));
+            show_all_scripts(type, connection.get_all_scripts(type, table_name, fields));
         });
     } else {
-        _load_scripts(type, connection.get_all_scripts(type, undefined, fields));
+        show_all_scripts(type, connection.get_all_scripts(type, undefined, fields));
     }
 
     
 }
 
-function _load_scripts(type, promise){
+function show_all_scripts(type, promise){
     promise
         .then((res_json) => {
             var script_names = res_json.result.map((single_script) => { return single_script.name;});
@@ -47,8 +47,9 @@ function _load_scripts(type, promise){
             }, this);
 
             control.set_status_message('$(thumbsup) ' + script_names.length + ' scripts loaded.');
+            console.log(script_names);
             vscode.window.showQuickPick(script_names)
-                .then(chosen_script => load_script(type, chosen_script, script_names_sysids[chosen_script]));
+                .then(chosen_script => show_single_script(type, chosen_script, script_names_sysids[chosen_script]));
         })
         .catch((rejected_reason) => {
             control.set_status_message('$(alert) Failed to load all scripts!');
@@ -56,17 +57,14 @@ function _load_scripts(type, promise){
         });
 }
 
-function load_script(type, name, sys_id){
+function show_single_script(type, name, sys_id){
     if (name === undefined){
         vscode.window.showInformationMessage('No script chosen.');
         return;
     }
     
-    var editor = vscode.window.activeTextEditor;
     var script_directory = script_dir + path.sep + instance + path.sep + type;
     var file_name = script_directory + path.sep + name.replace(/\s/g, '_').toLowerCase() + '.snow_sync.js';
-
-    if (!editor) return;
 
     control.set_status_message('$(radio-tower) Loading ' + type + ': ' + name + '...');
     mkdirp.sync(script_directory);
@@ -90,25 +88,13 @@ function load_script(type, name, sys_id){
                     }
                     vscode.workspace.openTextDocument(file_name).then((doc) => {
                         vscode.window.showTextDocument(doc);
-                        vscode.workspace.onWillSaveTextDocument((event) => {
-                            if (vscode.window.activeTextEditor.document.fileName.endsWith('.snow_sync.js')){
-                                connection.put_script(type, sys_id, vscode.window.activeTextEditor.document.getText())
-                                    .then(() => {
-                                        vscode.window.showInformationMessage('Script succesfully updated on server.');
-                                        control.set_status_message('$(thumbsup) Script updated on instance.');
-                                    })
-                                    .catch((rejected_reason) => {
-                                        vscode.window.showErrorMessage('Problem with request: ' + rejected_reason);
-                                        control.set_status_message('$(alert) Failed to update script on instance!');
-                                    });
-                            }
-                        });
+                        
                     });
                 });
                 var fields_to_load = script_config.get('fields_to_load_for_conf');
                 connection.get_script_config(type, name, sys_id, fields_to_load)
                     .then((res_json) => {
-                        var single_script_config_file = file_name.replace('.snow_sync.js', 'snow_sync.json')
+                        var single_script_config_file = file_name.replace('.snow_sync.js', '.snow_sync.json')
                         nconf.file('single_script', single_script_config_file);
                         var single_script_config = nconf.stores.single_script;
                         var keys = fields_to_load.split(',');

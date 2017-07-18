@@ -2,19 +2,32 @@
 
 This is a simple extensions for vscode. Major functionality (get/put scripts) is implemented. Currently it may be considered as a beta release. 
 
+![demo](./img/snow_sync_demo1.gif)
+
 ## Version
 
-Current version: 0.1.0 (early beta).
+Current version: 0.2.0 (early beta).
 
 ## Usage
 
 1. Run `SNOW Sync: Start work` command
 2. Check settings under `SNOW Sync: Show settings` command
-3. Choose your script with `SNOW Sync: Get script` command
+3. Choose your script:
+* Either with `SNOW Sync: Get script` command
    
    Optional: In case of business rules or client scripts, insert table name to load scripts that work on particular table.
 
    The script will be saved to your hard disk, under `project root dir given in settings/instance name given in settings/chosen script type` with `.snow_sync.js` extension.
+
+* Or open previously saved script
+
+   A config file (called `name of the script.snow_sync.json`) must exist in the same directory as script and must contain at least `sys_id` in `JSON` format, i.e.
+
+   ```
+   {
+       "sys_id": 12312312312312312312312312312312
+   }
+   ```
 
 4. Modify your script
 5. Save it

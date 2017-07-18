@@ -15,7 +15,8 @@
     ],
     "preview": true,
     "activationEvents": [
-        "onCommand:snow_sync.control.start"
+        "onCommand:snow_sync.control.start",
+        "workspaceContains:.snow_sync.js"
     ],
     "main": "./src/snow_sync",
     "contributes": {
@@ -40,7 +41,17 @@
                 "snow_sync.business_rule_fields": {
                     "type": "string",
                     "default": "name,sys_id,table,active,when,filter_condition,role_conditions,condition,action_insert,action_update,action_delete,action_query",
-                    "description": "Fields to load along with script. They will be saved in separate config file."
+                    "description": "Fields to load along with a business rule. They will be saved in separate config file."
+                },
+                "snow_sync.client_script_fields": {
+                    "type": "string",
+                    "default": "name,sys_id,table,active,type,field,description",
+                    "description": "Fields to load along with a client script. They will be saved in separate config file."
+                },
+                "snow_sync.fix_script_fields": {
+                    "type": "string",
+                    "default": "name,sys_id,active,unloadable,run_once,flush_cache,before,description",
+                    "description": "Fields to load along with a fix script. They will be saved in separate config file."
                 }
             }
         }

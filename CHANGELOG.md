@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.2.0] - 2017-07-18
+### Added
+- New configuration options for `vscode`: `snow_sync.client_script_fields` and `snow_sync.fix_script_fields`
+- When putting updates on servicenow instance, required configuration (table and sys_id) is read from config files - you can work on files without downloading them again. You still have to activate the plugin first though.
+- README now has a demo gif
+
 ## [0.1.1] - 2017-07-14
 ### Added
 - Another config file for every script type will be created/loaded upon script download. It will contain some basic information that you will be also able to upload soon in the future. That file will open in a new editor panel on the right side of the script.
