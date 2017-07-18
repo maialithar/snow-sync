@@ -8,6 +8,12 @@ This is a simple extensions for vscode. Major functionality (get/put scripts) is
 
 Current version: 0.2.0 (early beta).
 
+## Installation
+
+This extension is not yet published in marketplace. In order to use it, simply:
+1. Copy/download this repository and save it to `HOME DIRECTORY/.vscode/extensions`
+2. Restart `Visual Studio Code`
+
 ## Usage
 
 1. Run `SNOW Sync: Start work` command
