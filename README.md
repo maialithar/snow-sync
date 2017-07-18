@@ -10,7 +10,7 @@ Configuration update demo:
 
 ## Version
 
-Current version: 0.2.0 (early beta).
+Current version: 0.3.0 (early beta).
 
 ## Installation
 
