@@ -2,7 +2,11 @@
 
 This is a simple extensions for vscode. Major functionality (get/put scripts) is implemented. Currently it may be considered as a beta release. 
 
-![demo](./img/snow_sync_demo1.gif)
+Basic usage demo:
+![Basic usage](./img/snow_sync_demo1.gif)
+
+Configuration update demo:
+![Configuration update](./img/snow_sync_demo2.gif)
 
 ## Version
 

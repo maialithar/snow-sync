@@ -12,15 +12,16 @@ function activate(context) {
     context.subscriptions.push(start_comm);
 
     vscode.workspace.onWillSaveTextDocument((event) => {
-        if (vscode.window.activeTextEditor.document.fileName.endsWith('.snow_sync.js')){
-            var active_script_conf = '';
-            var global_script_conf = '';
-            var current_path = vscode.window.activeTextEditor.document.fileName;
+        var active_script_conf = '';
+        var global_script_conf = '';
+        var current_path = vscode.window.activeTextEditor.document.fileName;
 
-            nconf.file('active_script', current_path.replace('.snow_sync.js', '.snow_sync.json'));
-            active_script_conf = nconf.stores.active_script;
-            nconf.file('script', current_path.substring(0, current_path.lastIndexOf(path.sep) + 1) + 'globals.conf');
-            global_script_conf = nconf.stores.script;
+        nconf.file('active_script', current_path.substring(0, current_path.lastIndexOf('.') + 1) + 'json');//current_path.replace('.snow_sync.js', '.snow_sync.json'));
+        active_script_conf = nconf.stores.active_script;
+        nconf.file('script', current_path.substring(0, current_path.lastIndexOf(path.sep) + 1) + 'globals.conf');
+        global_script_conf = nconf.stores.script;
+
+        if (current_path.endsWith('.snow_sync.js')){
             require('./connection.js').put_script(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText())
                 .then(() => {
                     vscode.window.showInformationMessage('Script succesfully updated on server.');
@@ -31,8 +32,16 @@ function activate(context) {
                     require('./control.js').set_status_message('$(alert) Failed to update script on instance!');
                 });
         }
-        if (vscode.window.activeTextEditor.document.fileName.endsWith('.snow_sync.json')){
-
+        if (current_path.endsWith('.snow_sync.json')){
+            require('./connection.js').put_config(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText())
+                .then(() => {
+                    vscode.window.showInformationMessage('Configuration succesfully updated on server.');
+                    require('./control.js').set_status_message('$(thumbsup) Configuration updated on instance.');
+                })
+                .catch((rejected_reason) => {
+                    vscode.window.showErrorMessage('Problem with request: ' + rejected_reason);
+                    require('./control.js').set_status_message('$(alert) Failed to update configuration on instance!');
+                });
         }
     });
     

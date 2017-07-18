@@ -47,7 +47,6 @@ function show_all_scripts(type, promise){
             }, this);
 
             control.set_status_message('$(thumbsup) ' + script_names.length + ' scripts loaded.');
-            console.log(script_names);
             vscode.window.showQuickPick(script_names)
                 .then(chosen_script => show_single_script(type, chosen_script, script_names_sysids[chosen_script]));
         })

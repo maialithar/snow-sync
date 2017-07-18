@@ -157,6 +157,29 @@ function put_script(table, sys_id, script){
     });
 }
 
+function put_config(table, sys_id, config){
+    return new Promise((resolve, reject) => {
+        if (table === undefined || sys_id === undefined){
+            reject('There is a problem with either table name or sys_id!');
+        }
+        
+        options.path = '/api/now/table/' + table + '/' + sys_id;
+        options.method = 'PUT';
+
+        load_settings();
+        console.log(options);
+        console.log(config);
+        var req = https.request(options);
+
+        req.on('error', (e) => {
+            reject(e.message);
+        });
+        req.write(config);
+        req.end();
+        resolve();
+    });
+}
+
 function get_script_types(){
     return Object.keys(script_table);
 }
@@ -167,7 +190,8 @@ function get_script_table(type){
 
 exports.get_all_scripts = get_all_scripts;
 exports.get_one_script = get_one_script;
-exports.put_script = put_script;
 exports.get_script_types = get_script_types;
 exports.get_script_config = get_script_config;
 exports.get_script_table = get_script_table;
+exports.put_script = put_script;
+exports.put_config = put_config;
