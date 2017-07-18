@@ -46,7 +46,10 @@ This extension is not yet published in marketplace. In order to use it, simply:
 
 ## Features
 
-This extensions allows you to download chosen script (currently supports business rules, client scripts, script includes, fix scripts, validation scripts, email notification scripts and ui scripts) and display it in `Visual Studio Code` IDE. You can modify it and once saved, it will be uploaded to you instance directly.
+This extensions allows you to download chosen script (currently supports business rules, client scripts, script includes, fix scripts, email notification scripts and ui scripts) and display it in `Visual Studio Code` IDE. You can modify it and once saved, it will be uploaded to you instance directly. You can also modify some configuration options - they will also be uploaded on save.
+
+#### TODO: 
+- describe configuration contributions
 
 ## Requirements
 
