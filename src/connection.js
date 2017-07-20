@@ -74,37 +74,7 @@ function get_all_scripts(type, table_name = undefined, fields = 'name,sys_id'){
     });
 }
 
-function get_one_script(type, name, sys_id){
-    return new Promise((resolve, reject) => {
-        var res_string = '';
-        var res_json = {};
-        options.path = '/api/now/table/' + script_table[type] + '?sysparm_query=sys_id%3D' + sys_id + '&sysparm_fields=script';
-        options.method = 'GET';
-
-        load_settings();
-        var req = https.request(options, (res) => {
-            if (res.statusCode == '200'){
-                res.setEncoding('utf8');
-                res.on('data', (chunk) => {
-                    res_string += chunk;
-                });
-                res.on('end', () => {
-                    res_json = JSON.parse(res_string);
-                    resolve(res_json);
-                });
-            }
-        });
-
-        req.on('error', (e) => {
-            console.error(`Problem with request: ${e.message}`);
-            reject(e.message);
-        });
-
-        req.end();
-    });
-};
-
-function get_script_config(type, name, sys_id, fields) {
+function get_file(type, name, sys_id, fields) {
     return new Promise((resolve, reject) => {
         var res_string = '';
         var res_json = {};
@@ -134,13 +104,15 @@ function get_script_config(type, name, sys_id, fields) {
     });
 }
 
-function put_script(table, sys_id, script){
+function put(table, sys_id, data, is_script){
     return new Promise((resolve, reject) => {
         if (table === undefined || sys_id === undefined){
             reject('There is a problem with either table name or sys_id!');
         }
-        var put_me = {
-            'script': script
+        if (is_script){
+            data = {
+                'script': data
+            }
         }
         options.path = '/api/now/table/' + table + '/' + sys_id;
         options.method = 'PUT';
@@ -151,28 +123,7 @@ function put_script(table, sys_id, script){
         req.on('error', (e) => {
             reject(e.message);
         });
-        req.write(JSON.stringify(put_me));
-        req.end();
-        resolve();
-    });
-}
-
-function put_config(table, sys_id, config){
-    return new Promise((resolve, reject) => {
-        if (table === undefined || sys_id === undefined){
-            reject('There is a problem with either table name or sys_id!');
-        }
-        
-        options.path = '/api/now/table/' + table + '/' + sys_id;
-        options.method = 'PUT';
-
-        load_settings();
-        var req = https.request(options);
-
-        req.on('error', (e) => {
-            reject(e.message);
-        });
-        req.write(config);
+        req.write(is_script ? JSON.stringify(data) : data);
         req.end();
         resolve();
     });
@@ -186,10 +137,41 @@ function get_script_table(type){
     return script_table[type];
 }
 
+function get(path){
+    options.path = path;
+    options.method = 'GET';
+
+    load_settings();
+
+    return new Promise((resolve, reject) => {
+        var res_string = '';
+
+        var req = https.request(options, (res) => {
+            if (res.statusCode == '200' || res.statusCode == '302'){
+                res.setEncoding('utf8');
+                res.on('data', (chunk) => {
+                    res_string += chunk;
+                });
+                res.on('end', () => {
+                    resolve(res_string);
+                });
+            } else {
+                reject(res.statusCode + ': ' + res.statusMessage);
+            }
+        });
+
+        req.on('error', (e) => {
+            console.error(`Problem with request: ${e.message}`);
+            reject(e.message);
+        });
+
+        req.end();
+    });
+}
+
 exports.get_all_scripts = get_all_scripts;
-exports.get_one_script = get_one_script;
 exports.get_script_types = get_script_types;
-exports.get_script_config = get_script_config;
+exports.get_file = get_file;
 exports.get_script_table = get_script_table;
-exports.put_script = put_script;
-exports.put_config = put_config;
+exports.get = get;
+exports.put = put;

@@ -10,7 +10,7 @@ Configuration update demo:
 
 ## Version
 
-Current version: 0.3.0 (early beta).
+Current version: 0.4.0 (early beta).
 
 ## Installation
 
@@ -29,7 +29,7 @@ You can also download a `vsix` file from this repository and [install it directl
    
    Optional: In case of business rules or client scripts, insert table name to load scripts that work on particular table.
 
-   The script will be saved to your hard disk, under `project root dir given in settings/instance name given in settings/chosen script type` with `.snow_sync.js` extension.
+   The script will be saved to your hard disk, under `project root dir given in settings/instance name given in settings/chosen script type` with `.snow_sync.js` extension. Along with the script, its configuration file with `script name.snow_sync.json` name will be saved and opened in second editor, next to the current one.
 
 * Or open previously saved script
 
@@ -37,18 +37,20 @@ You can also download a `vsix` file from this repository and [install it directl
 
    ```
    {
-       "sys_id": 12312312312312312312312312312312
+       "sys_id": "12312312312312312312312312312312"
    }
    ```
 
-4. Modify your script
+4. Modify your file
 5. Save it
 
    It will be automatically uploaded to your instance.
 
 ## Features
 
-This extensions allows you to download chosen script (currently supports business rules, client scripts, script includes, fix scripts, email notification scripts and ui scripts) and display it in `Visual Studio Code` IDE. You can modify it and once saved, it will be uploaded to you instance directly. You can also modify some configuration options - they will also be uploaded on save.
+This extensions allows you to download chosen script (currently supports business rules, client scripts, script includes, fix scripts, email notification scripts and ui scripts) and its configuration and display it in `Visual Studio Code` IDE. You can modify it and once saved, it will be uploaded to you instance directly. You can also modify some configuration options - they will also be uploaded on save.
+
+You can also view your currently chosen instance's statistics (`stats.do`) - they will be displayed as a `HTML` preview in new editor.
 
 ### Configuration options 
 This extension comes with additional configuration options for every script that can be chosen. You can select which fields will be downloaded and saved to script config file. How to change them?

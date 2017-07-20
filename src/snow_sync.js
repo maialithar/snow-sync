@@ -5,11 +5,15 @@ var path = require('path');
 function activate(context) {
     var settings_comm = vscode.commands.registerCommand('snow_sync.settings.show_settings', () => require('./settings.js').show_settings());
     var connection_comm = vscode.commands.registerCommand('snow_sync.script.get_script', () => require('./script.js').show_script_type_picker());
+    var stats_comm = vscode.commands.registerCommand('snow_sync.statistics.get', () => require('./statistics.js').get_statistics());
+    var cache_comm = vscode.commands.registerCommand('snow_sync.cache.clear', () => require('./cache.js').clear_cache());
 
     context.subscriptions.push(settings_comm);
     context.subscriptions.push(connection_comm);
+    context.subscriptions.push(stats_comm);
+    context.subscriptions.push(cache_comm);
 
-    vscode.workspace.onWillSaveTextDocument((event) => {
+    vscode.workspace.onWillSaveTextDocument(() => {
         var active_script_conf = '';
         var global_script_conf = '';
         var current_path = vscode.window.activeTextEditor.document.fileName;
@@ -20,7 +24,7 @@ function activate(context) {
         global_script_conf = nconf.stores.script;
 
         if (current_path.endsWith('.snow_sync.js')){
-            require('./connection.js').put_script(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText())
+            require('./connection.js').put(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText(), true)
                 .then(() => {
                     vscode.window.showInformationMessage('Script succesfully updated on server.');
                     require('./control.js').set_status_message('$(thumbsup) Script updated on instance.');
@@ -31,7 +35,7 @@ function activate(context) {
                 });
         }
         if (current_path.endsWith('.snow_sync.json')){
-            require('./connection.js').put_config(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText())
+            require('./connection.js').put(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText())
                 .then(() => {
                     vscode.window.showInformationMessage('Configuration succesfully updated on server.');
                     require('./control.js').set_status_message('$(thumbsup) Configuration updated on instance.');

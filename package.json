@@ -37,6 +37,11 @@
                 "command": "snow_sync.script.get_script",
                 "category": "SNOW Sync",
                 "title": "Get script"
+            },
+            {
+                "command": "snow_sync.statistics.get",
+                "category": "SNOW Sync Admin",
+                "title": "Show statistics"
             }
         ],
         "configuration": {

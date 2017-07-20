@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.0] - 2017-07-20
+### Added
+- new command: `SNOW Sync Admin: Show statistics`. It will perform a `GET` request on current instance, return the `HTML` results and display it next to the current editor
+
+### Changed
+- code refactoring
+
 ## [0.3.0] - 2017-07-18
 ### Changed
 - extensions will now be active after startup, no need to activate it via command

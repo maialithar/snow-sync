@@ -32,8 +32,6 @@ function show_script_picker(type, fields = 'name,sys_id') {
     } else {
         show_all_scripts(type, connection.get_all_scripts(type, undefined, fields));
     }
-
-    
 }
 
 function show_all_scripts(type, promise){
@@ -76,7 +74,7 @@ function show_single_script(type, name, sys_id){
         script_config.save();
     }
 
-    connection.get_one_script(type, name, sys_id)
+    connection.get_file(type, name, sys_id, 'script')
         .then((res_json) => {
             control.set_status_message('$(thumbsup) Script loaded.');
             if (res_json.result.length > 0){
@@ -87,11 +85,10 @@ function show_single_script(type, name, sys_id){
                     }
                     vscode.workspace.openTextDocument(file_name).then((doc) => {
                         vscode.window.showTextDocument(doc);
-                        
                     });
                 });
                 var fields_to_load = script_config.get('fields_to_load_for_conf');
-                connection.get_script_config(type, name, sys_id, fields_to_load)
+                connection.get_file(type, name, sys_id, fields_to_load)
                     .then((res_json) => {
                         var single_script_config_file = file_name.replace('.snow_sync.js', '.snow_sync.json')
                         nconf.file('single_script', single_script_config_file);
@@ -109,6 +106,7 @@ function show_single_script(type, name, sys_id){
                     })
                     .catch((rejected_reason) => {
                         console.log(rejected_reason);
+                        vscode.window.showErrorMessage('Get script config error: ' + rejected_reason);
                     });
             } else {
 
