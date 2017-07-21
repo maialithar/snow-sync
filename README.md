@@ -1,6 +1,6 @@
 # snow-sync readme
 
-This is a simple extensions for vscode. Major functionality (get/put scripts) is implemented. Currently it may be considered as a beta release. 
+This is a simple extensions for vscode. Major functionality (get/patch scripts) is implemented. Currently it may be considered as a beta release. 
 
 Basic usage demo:
 ![Basic usage](./img/snow_sync_demo1.gif)
@@ -10,7 +10,7 @@ Configuration update demo:
 
 ## Version
 
-Current version: 0.4.0 (early beta).
+Current version: 0.4.1 (early beta).
 
 ## Installation
 
@@ -62,7 +62,7 @@ This extension comes with additional configuration options for every script that
 
 ## Requirements
 
-1. Active ServiceNow instance accepting GET/PUT requests
+1. Active ServiceNow instance accepting GET/PATCH requests
 2. Username/password for that instance with permissions to read scripts
 
 ## Known Issues

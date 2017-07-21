@@ -104,7 +104,7 @@ function get_file(type, name, sys_id, fields) {
     });
 }
 
-function put(table, sys_id, data, is_script){
+function patch(table, sys_id, data, is_script){
     return new Promise((resolve, reject) => {
         if (table === undefined || sys_id === undefined){
             reject('There is a problem with either table name or sys_id!');
@@ -115,7 +115,7 @@ function put(table, sys_id, data, is_script){
             }
         }
         options.path = '/api/now/table/' + table + '/' + sys_id;
-        options.method = 'PUT';
+        options.method = 'PATCH';
 
         load_settings();
         var req = https.request(options);
@@ -174,4 +174,4 @@ exports.get_script_types = get_script_types;
 exports.get_file = get_file;
 exports.get_script_table = get_script_table;
 exports.get = get;
-exports.put = put;
+exports.patch = patch;

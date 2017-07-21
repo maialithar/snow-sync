@@ -24,7 +24,7 @@ function activate(context) {
         global_script_conf = nconf.stores.script;
 
         if (current_path.endsWith('.snow_sync.js')){
-            require('./connection.js').put(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText(), true)
+            require('./connection.js').patch(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText(), true)
                 .then(() => {
                     vscode.window.showInformationMessage('Script succesfully updated on server.');
                     require('./control.js').set_status_message('$(thumbsup) Script updated on instance.');
@@ -35,7 +35,7 @@ function activate(context) {
                 });
         }
         if (current_path.endsWith('.snow_sync.json')){
-            require('./connection.js').put(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText())
+            require('./connection.js').patch(global_script_conf.get('table'), active_script_conf.get('sys_id'), vscode.window.activeTextEditor.document.getText())
                 .then(() => {
                     vscode.window.showInformationMessage('Configuration succesfully updated on server.');
                     require('./control.js').set_status_message('$(thumbsup) Configuration updated on instance.');

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.1] = 2017-07-21
+### Changed
+- there is a better HTTP method to update records - `PATCH` instead of `PUT`
+
 ## [0.4.0] - 2017-07-20
 ### Added
 - new command: `SNOW Sync Admin: Show statistics`. It will perform a `GET` request on current instance, return the `HTML` results and display it next to the current editor
