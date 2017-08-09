@@ -46,6 +46,11 @@ function save_new_setting(setting){
             return;
         }
 
+        if (setting == settings_INSTANCE){
+            new_value = new_value.split('.')[0];
+            if (new_value.startsWith('http'))
+                new_value = new_value.substring(new_value.indexOf('://') + 3);
+        }
         settings_conf.set(setting, new_value);
         settings_conf.save();
 
