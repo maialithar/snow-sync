@@ -2,8 +2,8 @@
     "name": "snow-sync",
     "displayName": "SNOW Sync",
     "description": "Script synchronization for ServiceNow instance",
-    "version": "0.4.1",
-    "publisher": "elali",
+    "version": "0.5.0",
+    "publisher": "maialithar",
     "engines": {
         "vscode": "^1.13.0"
     },
@@ -32,6 +32,11 @@
                 "command": "snow_sync.settings.show_settings",
                 "category": "SNOW Sync",
                 "title": "Show settings"
+            },
+            {
+                "command": "snow_sync.settings.set_active_instance",
+                "category": "SNOW Sync",
+                "title": "Set active instance"
             },
             {
                 "command": "snow_sync.script.get_script",

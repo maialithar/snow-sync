@@ -21,7 +21,7 @@ function get_statistics(){
             });
         })
         .catch((rejected_reason) => {
-            console.log(rejected_reason);
+            require('./control.js').set_status_message('$(thumbsdown) Failed...');
         });
 }
 

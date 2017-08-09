@@ -13,7 +13,9 @@ const instance = settings.get('instance');
 const script_dir = settings.get('root project directory');
 
 function show_script_type_picker(){
-    vscode.window.showQuickPick(connection.get_script_types()).then(script_type => show_script_picker(script_type));
+    connection.test_connection().then(() => {
+        vscode.window.showQuickPick(connection.get_script_types()).then(script_type => show_script_picker(script_type))
+    });
 }
 
 function show_script_picker(type, fields = 'name,sys_id') {

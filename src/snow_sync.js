@@ -4,11 +4,13 @@ var path = require('path');
 
 function activate(context) {
     var settings_comm = vscode.commands.registerCommand('snow_sync.settings.show_settings', () => require('./settings.js').show_settings());
+    var set_active_instance_comm = vscode.commands.registerCommand('snow_sync.settings.set_active_instance', () => require('./settings.js').set_active_instance());
     var connection_comm = vscode.commands.registerCommand('snow_sync.script.get_script', () => require('./script.js').show_script_type_picker());
     var stats_comm = vscode.commands.registerCommand('snow_sync.statistics.get', () => require('./statistics.js').get_statistics());
     var cache_comm = vscode.commands.registerCommand('snow_sync.cache.clear', () => require('./cache.js').clear_cache());
 
     context.subscriptions.push(settings_comm);
+    context.subscriptions.push(set_active_instance_comm);
     context.subscriptions.push(connection_comm);
     context.subscriptions.push(stats_comm);
     context.subscriptions.push(cache_comm);

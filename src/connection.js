@@ -145,7 +145,8 @@ function get(path){
 
     return new Promise((resolve, reject) => {
         var res_string = '';
-
+        if (instance === undefined || instance == '')
+            reject();
         var req = https.request(options, (res) => {
             if (res.statusCode == '200' || res.statusCode == '302'){
                 res.setEncoding('utf8');
@@ -169,9 +170,40 @@ function get(path){
     });
 }
 
+function test_connection(){
+    return new Promise((resolve, reject) => {
+        options.method = 'GET';
+
+        load_settings();
+        
+        if (instance === undefined && instance == ''){
+            reject();
+        }
+
+        var req = https.request(options, (res) => {
+            if (res.statusCode == '200' || res.statusCode == '302'){
+                res.setEncoding('utf8');
+                res.on('end', () => {
+                    resolve();
+                });
+            } else {
+                reject(res.statusCode + ': ' + res.statusMessage);
+            }
+        });
+
+        req.on('error', (e) => {
+            console.error(`Problem with request: ${e.message}`);
+            reject(e.message);
+        });
+
+        req.end();
+    });
+}
+
 exports.get_all_scripts = get_all_scripts;
 exports.get_script_types = get_script_types;
 exports.get_file = get_file;
 exports.get_script_table = get_script_table;
 exports.get = get;
 exports.patch = patch;
+exports.test_connection = test_connection;

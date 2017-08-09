@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - it will still work when you put your instance with full http address
 
+### Added
+- multiple instances
+
 ## [0.4.1] - 2017-07-21
 ### Changed
 - there is a better HTTP method to update records - `PATCH` instead of `PUT`
