@@ -10,7 +10,7 @@ Configuration update demo:
 
 ## Version
 
-Current version: 0.4.1 (early beta).
+Current version: 0.5.0.
 
 ## Installation
 
@@ -22,6 +22,7 @@ You can also download a `vsix` file from this repository and [install it directl
 
 ## Usage
 
+### TODO write about multiple instances
 1. Run `SNOW Sync: Start work` command
 2. Check settings under `SNOW Sync: Show settings` command
 3. Choose your script:
