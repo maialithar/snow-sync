@@ -8,9 +8,13 @@ Basic usage demo:
 Configuration update demo:
 ![Configuration update](./img/snow_sync_demo2.gif)
 
+## License
+
+See [LICENSE](LICENSE).
+
 ## Version
 
-Current version: 0.5.0.
+Current version: 0.6.0.
 
 ## Installation
 
@@ -68,8 +72,8 @@ This extension comes with additional configuration options for every script that
 
 ## Known Issues
 
-- It fails to load scripts when given instance has domain name
-- No multiple instances
+- ~~It fails to load scripts when given instance has domain name~~
+- ~~No multiple instances~~
 - It doesn't check for permissions
 
 ## Release Notes

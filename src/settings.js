@@ -68,7 +68,7 @@ function save_new_setting(setting, val = null){
         settings_conf.save();
 
         // create instance directory
-        if (settings_conf.get(active_instance + ':' + settings_ROOT_DIR) && settings_conf.get(active_instance + ':' + settings_INSTANCE) && setting == settings_INSTANCE){
+        if (settings_conf.get(active_instance + ':' + settings_ROOT_DIR) && settings_conf.get(active_instance + ':' + settings_INSTANCE) && (setting == settings_INSTANCE || setting == settings_ROOT_DIR)){
             fs.stat(settings_conf.get(active_instance + ':' + settings_ROOT_DIR) + path.sep + settings_conf.get(active_instance + ':' + settings_INSTANCE), (err) => {
                 if (err)
                     mkdirp(settings_conf.get(active_instance + ':' + settings_ROOT_DIR) + path.sep + settings_conf.get(active_instance + ':' + settings_INSTANCE), (err2) => {
@@ -101,8 +101,10 @@ function set_active_instance(){
             .then((chosen_instance) => {
                 if (chosen_instance === 'Add new instance')
                     add_new_instance();
-                if (chosen_instance != undefined || chosen_instance != '')
+                else if (chosen_instance != undefined || chosen_instance != ''){
                     active_instance = chosen_instance;
+                    vscode.window.showInformationMessage('Selected ' + chosen_instance + ' as active instance.');
+                }
             });
     });
 }
@@ -114,10 +116,40 @@ function add_new_instance(){
                 return;
             active_instance = new_name;
             save_new_setting(settings_FRIENDLY, new_name);
-            //show_settings();
+            vscode.window.showInformationMessage('New instance added: ' + new_name);
         });
+}
+
+function remove_instance(){
+    load_settings(() => {
+        let available_instances = Object.keys(settings_conf.get());
+        vscode.window.showQuickPick(available_instances)
+            .then((chosen_instance) => {
+                if (chosen_instance != undefined || chosen_instance != ''){
+                    vscode.window.showWarningMessage('When you remove an instance, whole directory structure (incl. scripts) will be removed from its root folder - proceed?', ...['Go on', 'Forfeit'])
+                        .then((option) => {
+                            if (option == 'Forfeit'){
+                                return;
+                            }
+                            if (option == 'Go on') {
+                                if (active_instance == chosen_instance){
+                                    active_instance = undefined;
+                                    vscode.window.showInformationMessage('Removed active instance, it is now set to `undefined`.');
+                                }
+                                (require('rimraf'))(settings_conf.get(chosen_instance + ':' + settings_ROOT_DIR) + path.sep + settings_conf.get(chosen_instance + ':' + settings_INSTANCE), function(){
+                                    vscode.window.showInformationMessage('Directory structure and all scripts from instance "' + chosen_instance + '" removed.');
+                                });
+                                settings_conf.store[chosen_instance] = null;
+                                delete settings_conf.store[chosen_instance];
+                                settings_conf.save();
+                            }
+                        });
+                }
+            });
+    });
 }
 
 exports.show_settings = show_settings;
 exports.get = get;
 exports.set_active_instance = set_active_instance;
+exports.remove_instance = remove_instance;

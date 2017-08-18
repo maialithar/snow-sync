@@ -2,8 +2,9 @@
     "name": "snow-sync",
     "displayName": "SNOW Sync",
     "description": "Script synchronization for ServiceNow instance",
-    "version": "0.5.0",
+    "version": "0.6.0",
     "publisher": "maialithar",
+    "license": "SEE LICENSE IN LICENSE",
     "engines": {
         "vscode": "^1.13.0"
     },
@@ -37,6 +38,11 @@
                 "command": "snow_sync.settings.set_active_instance",
                 "category": "SNOW Sync",
                 "title": "Set active instance"
+            },
+            {
+                "command": "snow_sync.settings.remove_instance",
+                "category": "SNOW Sync",
+                "title": "Remove instance from local repository"
             },
             {
                 "command": "snow_sync.script.get_script",
@@ -97,6 +103,7 @@
         "eslint": "^3.6.0",
         "nconf": "^0.8.4",
         "mkdirp": "^0.5.1",
+        "rimraf":"^2.6.1",
         "@types/node": "^6.0.40",
         "@types/mocha": "^2.2.32"
     }

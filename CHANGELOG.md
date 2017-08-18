@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.6.0] - 2017-08-18
+### Added
+- option to remove instance
+- more informations on connection errors and instance selection
+### Changed
+- some code refactoring
+### Fixed
+- instance directory will be created when both instance name and root project directory are set, no matter the order of input
+
 ## [0.5.0] - 2017-08-09
 ### Fixed
 - it will still work when you put your instance with full http address
-
 ### Added
 - multiple instances
 
@@ -21,14 +29,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.4.0] - 2017-07-20
 ### Added
 - new command: `SNOW Sync Admin: Show statistics`. It will perform a `GET` request on current instance, return the `HTML` results and display it next to the current editor
-
 ### Changed
 - code refactoring
 
 ## [0.3.0] - 2017-07-18
 ### Changed
 - extensions will now be active after startup, no need to activate it via command
-
 ### Removed
 - `SNOW Sync: Start working` command
 
@@ -41,7 +47,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.1.1] - 2017-07-14
 ### Added
 - Another config file for every script type will be created/loaded upon script download. It will contain some basic information that you will be also able to upload soon in the future. That file will open in a new editor panel on the right side of the script.
-
 ### Fixed
 - Finally fixed a problem with script not getting loaded. It should load every time
 

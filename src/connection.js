@@ -66,8 +66,7 @@ function get_all_scripts(type, table_name = undefined, fields = 'name,sys_id'){
         });
 
         req.on('error', (e) => {
-            console.error(`Problem with request: ${e.message}`);
-            reject(e.message);
+            reject('Problem with request: ' + e.message);
         });
 
         req.end();
@@ -96,8 +95,7 @@ function get_file(type, name, sys_id, fields) {
         });
 
         req.on('error', (e) => {
-            console.error(`Problem with request: ${e.message}`);
-            reject(e.message);
+            reject('Problem with request: ' + e.message);
         });
 
         req.end();
@@ -121,7 +119,7 @@ function patch(table, sys_id, data, is_script){
         var req = https.request(options);
 
         req.on('error', (e) => {
-            reject(e.message);
+            reject('Problem with request: ' + e.message);
         });
         req.write(is_script ? JSON.stringify(data) : data);
         req.end();
@@ -146,7 +144,7 @@ function get(path){
     return new Promise((resolve, reject) => {
         var res_string = '';
         if (instance === undefined || instance == '')
-            reject();
+            reject('No instance chosen!');
         var req = https.request(options, (res) => {
             if (res.statusCode == '200' || res.statusCode == '302'){
                 res.setEncoding('utf8');
@@ -157,13 +155,12 @@ function get(path){
                     resolve(res_string);
                 });
             } else {
-                reject(res.statusCode + ': ' + res.statusMessage);
+                reject('Problem with request: ' + res.statusCode + ': ' + res.statusMessage);
             }
         });
 
         req.on('error', (e) => {
-            console.error(`Problem with request: ${e.message}`);
-            reject(e.message);
+            reject('Problem with request: ' + e.message);
         });
 
         req.end();
@@ -177,7 +174,7 @@ function test_connection(){
         load_settings();
         
         if (instance === undefined && instance == ''){
-            reject();
+            reject('No instance chosen!');
         }
 
         var req = https.request(options, (res) => {
@@ -187,13 +184,12 @@ function test_connection(){
                     resolve();
                 });
             } else {
-                reject(res.statusCode + ': ' + res.statusMessage);
+                reject('Problem with request: ' + res.statusCode + ' - ' + res.statusMessage);
             }
         });
 
         req.on('error', (e) => {
-            console.error(`Problem with request: ${e.message}`);
-            reject(e.message);
+            reject('Problem with request: ' + e.message);
         });
 
         req.end();
