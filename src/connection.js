@@ -20,6 +20,7 @@ var options = {
     'method': '',
     'path': '',
     'port': 443,
+    'timeout': 5000,
     'headers': {
         'Content-Type': 'application/json', 
         'Accept': 'application/json',
@@ -143,8 +144,6 @@ function get(path){
 
     return new Promise((resolve, reject) => {
         var res_string = '';
-        if (instance === undefined || instance == '')
-            reject('No instance chosen!');
         var req = https.request(options, (res) => {
             if (res.statusCode == '200' || res.statusCode == '302'){
                 res.setEncoding('utf8');
@@ -170,29 +169,35 @@ function get(path){
 function test_connection(){
     return new Promise((resolve, reject) => {
         options.method = 'GET';
-
         load_settings();
-        
-        if (instance === undefined && instance == ''){
-            reject('No instance chosen!');
+        if (instance !== undefined && instance != ''){
+            var req = https.request(options, (res) => {
+                if (res.statusCode == '200' || res.statusCode == '302'){
+                    let res_data = '';
+                    res.setEncoding('utf8');
+                    res.on('data', (chunk) => {
+                        res_data += chunk;
+                    });
+                    res.on('end', () => {
+                        if (res_data.includes('Hibernating instance')){
+                            reject('Looks like your instance is sleeping...');
+                        } else {
+                            resolve();
+                        }
+                    });
+                } else {
+                    reject('Problem with request: ' + res.statusCode + ' - ' + res.statusMessage);
+                }
+            });
+
+            req.on('error', (e) => {
+                reject('Problem with request: ' + e.message);
+            });
+
+            req.end();
+        } else {
+            reject('No settings loaded!');
         }
-
-        var req = https.request(options, (res) => {
-            if (res.statusCode == '200' || res.statusCode == '302'){
-                res.setEncoding('utf8');
-                res.on('end', () => {
-                    resolve();
-                });
-            } else {
-                reject('Problem with request: ' + res.statusCode + ' - ' + res.statusMessage);
-            }
-        });
-
-        req.on('error', (e) => {
-            reject('Problem with request: ' + e.message);
-        });
-
-        req.end();
     });
 }
 

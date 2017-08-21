@@ -104,6 +104,7 @@ function set_active_instance(){
                 else if (chosen_instance != undefined || chosen_instance != ''){
                     active_instance = chosen_instance;
                     vscode.window.showInformationMessage('Selected ' + chosen_instance + ' as active instance.');
+                    require('./control.js').set_status_instance_message();
                 }
             });
     });
@@ -149,7 +150,12 @@ function remove_instance(){
     });
 }
 
+function get_active_instance(){
+    return active_instance;
+}
+
 exports.show_settings = show_settings;
 exports.get = get;
 exports.set_active_instance = set_active_instance;
 exports.remove_instance = remove_instance;
+exports.get_active_instance = get_active_instance;

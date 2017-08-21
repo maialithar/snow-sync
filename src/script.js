@@ -13,9 +13,16 @@ const instance = settings.get('instance');
 const script_dir = settings.get('root project directory');
 
 function show_script_type_picker(){
-    connection.test_connection().then(() => {
-        vscode.window.showQuickPick(connection.get_script_types()).then(script_type => show_script_picker(script_type))
-    });
+    control.set_status_message('$(clock) Trying to connect to chosen instance...');
+    connection.test_connection()
+        .then(() => {
+            control.set_status_message('$(question) Choose script type.');
+            vscode.window.showQuickPick(connection.get_script_types()).then(script_type => show_script_picker(script_type))
+        })
+        .catch((msg) => {
+            control.set_status_message('$(x) Error!');
+            vscode.window.showErrorMessage(msg);
+        });
 }
 
 function show_script_picker(type, fields = 'name,sys_id') {
@@ -78,6 +85,9 @@ function show_single_script(type, name, sys_id){
 
     connection.get_file(type, name, sys_id, 'script')
         .then((res_json) => {
+            setTimeout(() => {
+                control.start();
+            }, 2000);
             control.set_status_message('$(thumbsup) Script loaded.');
             if (res_json.result.length > 0){
                 fs.writeFile(file_name, res_json.result[0].script, 'utf8', (err) => {

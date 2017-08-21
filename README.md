@@ -14,7 +14,7 @@ See [LICENSE](LICENSE).
 
 ## Version
 
-Current version: 0.6.0.
+Current version: 0.6.1.
 
 ## Installation
 
@@ -26,8 +26,7 @@ You can also download a `vsix` file from this repository and [install it directl
 
 ## Usage
 
-### TODO write about multiple instances
-1. Run `SNOW Sync: Start work` command
+1. Run `SNOW Sync: Set active instance` command and select instance to connect to
 2. Check settings under `SNOW Sync: Show settings` command
 3. Choose your script:
 * Either with `SNOW Sync: Get script` command
