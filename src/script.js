@@ -12,16 +12,33 @@ var script_config = '';
 const instance = settings.get('instance');
 const script_dir = settings.get('root project directory');
 
-function show_script_type_picker(){
+function show_script_type_picker(is_new = false){
     control.set_status_message('$(clock) Trying to connect to chosen instance...');
     connection.test_connection()
         .then(() => {
             control.set_status_message('$(question) Choose script type.');
-            vscode.window.showQuickPick(connection.get_script_types()).then(script_type => show_script_picker(script_type))
+            vscode.window.showQuickPick(connection.get_script_types())
+                .then((script_type) => (is_new ? load_script_template(script_type) : show_script_picker(script_type)))
         })
         .catch((msg) => {
             control.set_status_message('$(x) Error!');
             vscode.window.showErrorMessage(msg);
+        });
+}
+
+function load_script_template(script_type){
+    control.set_status_message('$(plus-small) New ' + script_type);
+    vscode.window.showInputBox({prompt: 'Enter the name of the new ' + script_type, placeHolder: 'Script Name'})
+        .then((new_name) => {
+            if (new_name === undefined || new_name == ''){
+                vscode.window.showInformationMessage('No new script name given, cancelling...');
+                return;
+            }
+
+            var script_directory = script_dir + path.sep + instance + path.sep + script_type;
+            var file_name = script_directory + path.sep + new_name.replace(/\s/g, '_').toLowerCase() + '.snow_sync.js';
+            mkdirp.sync(script_directory);
+            load_script_conf(script_directory);
         });
 }
 
@@ -63,6 +80,17 @@ function show_all_scripts(type, promise){
         });
 }
 
+function load_script_conf(script_directory){
+    nconf.file('script', script_directory + path.sep + global_conf_file);
+    script_config = nconf.stores.script;
+    if (script_config.get().length === undefined){
+        script_config.set('table', connection.get_script_table(type));
+        script_config.set('script_field', 'script');
+        script_config.set('fields_to_load_for_conf', (vscode.workspace.getConfiguration('snow_sync').get(type.toLowerCase().replace(/\s/g, '_') + '_fields')) || 'name,sys_id');
+        script_config.save();
+    }
+}
+
 function show_single_script(type, name, sys_id){
     if (name === undefined){
         vscode.window.showInformationMessage('No script chosen.');
@@ -74,14 +102,7 @@ function show_single_script(type, name, sys_id){
 
     control.set_status_message('$(radio-tower) Loading ' + type + ': ' + name + '...');
     mkdirp.sync(script_directory);
-    nconf.file('script', script_directory + path.sep + global_conf_file);
-    script_config = nconf.stores.script;
-    if (script_config.get().length === undefined){
-        script_config.set('table', connection.get_script_table(type));
-        script_config.set('script_field', 'script');
-        script_config.set('fields_to_load_for_conf', (vscode.workspace.getConfiguration('snow_sync').get(type.toLowerCase().replace(/\s/g, '_') + '_fields')) || 'name,sys_id');
-        script_config.save();
-    }
+    load_script_conf(script_directory);
 
     connection.get_file(type, name, sys_id, 'script')
         .then((res_json) => {

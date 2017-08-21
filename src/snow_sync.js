@@ -6,14 +6,16 @@ function activate(context) {
     var settings_comm = vscode.commands.registerCommand('snow_sync.settings.show_settings', () => require('./settings.js').show_settings());
     var set_active_instance_comm = vscode.commands.registerCommand('snow_sync.settings.set_active_instance', () => require('./settings.js').set_active_instance());
     var remove_instance_comm = vscode.commands.registerCommand('snow_sync.settings.remove_instance', () => require('./settings.js').remove_instance());
-    var connection_comm = vscode.commands.registerCommand('snow_sync.script.get_script', () => require('./script.js').show_script_type_picker());
+    var get_script_comm = vscode.commands.registerCommand('snow_sync.script.get_script', () => require('./script.js').show_script_type_picker());
+    var new_script_comm = vscode.commands.registerCommand('snow_sync.script.new_script', () => require('./script.js').show_script_type_picker(true));
     var stats_comm = vscode.commands.registerCommand('snow_sync.statistics.get', () => require('./statistics.js').get_statistics());
     var cache_comm = vscode.commands.registerCommand('snow_sync.cache.clear', () => require('./cache.js').clear_cache());
 
     context.subscriptions.push(settings_comm);
     context.subscriptions.push(set_active_instance_comm);
     context.subscriptions.push(remove_instance_comm);
-    context.subscriptions.push(connection_comm);
+    context.subscriptions.push(get_script_comm);
+    context.subscriptions.push(new_script_comm);
     context.subscriptions.push(stats_comm);
     context.subscriptions.push(cache_comm);
 
@@ -22,7 +24,7 @@ function activate(context) {
         var global_script_conf = '';
         var current_path = vscode.window.activeTextEditor.document.fileName;
 
-        nconf.file('active_script', current_path.substring(0, current_path.lastIndexOf('.') + 1) + 'json');//current_path.replace('.snow_sync.js', '.snow_sync.json'));
+        nconf.file('active_script', current_path.substring(0, current_path.lastIndexOf('.') + 1) + 'json');
         active_script_conf = nconf.stores.active_script;
         nconf.file('script', current_path.substring(0, current_path.lastIndexOf(path.sep) + 1) + 'globals.conf');
         global_script_conf = nconf.stores.script;

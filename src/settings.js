@@ -96,7 +96,7 @@ function get(what){
 function set_active_instance(){
     load_settings(() => {
         let available_instances = Object.keys(settings_conf.get());
-        available_instances.push('Add new instance');
+        available_instances.push('$(plus) Add new instance');
         vscode.window.showQuickPick(available_instances)
             .then((chosen_instance) => {
                 if (chosen_instance === 'Add new instance')

@@ -22,6 +22,7 @@ function get_statistics(){
         })
         .catch((rejected_reason) => {
             require('./control.js').set_status_message('$(thumbsdown) Failed...');
+            vscode.window.showErrorMessage('Failed: ' + rejected_reason);
         });
 }
 
