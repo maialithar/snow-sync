@@ -179,7 +179,7 @@ function test_connection(){
                         res_data += chunk;
                     });
                     res.on('end', () => {
-                        if (res_data.includes('Hibernating instance')){
+                        if (res_data.includes('Hibernating Instance')){
                             reject('Looks like your instance is sleeping...');
                         } else {
                             resolve();

@@ -12,7 +12,9 @@
         "Other"
     ],
     "keywords": [
-        "snow", "servicenow", "script sync"
+        "snow",
+        "servicenow",
+        "script sync"
     ],
     "repository": {
         "type": "git",
@@ -103,7 +105,7 @@
         "eslint": "^3.6.0",
         "nconf": "^0.8.4",
         "mkdirp": "^0.5.1",
-        "rimraf":"^2.6.1",
+        "rimraf": "^2.6.1",
         "@types/node": "^6.0.40",
         "@types/mocha": "^2.2.32"
     }
