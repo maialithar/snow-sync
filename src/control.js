@@ -23,8 +23,15 @@ function set_status_instance_message(){
     let active_instance = require('./settings.js').get_active_instance();
     status_active_instance.hide();
     if (active_instance !== undefined) {
-        status_active_instance.color = 'green';
-        status_active_instance.text = '$(cloud-upload) Connected to instance: ' + active_instance;
+        require('./connection.js').test_connection()
+            .then(() => {
+                status_active_instance.color = 'green';
+                status_active_instance.text = '$(cloud-upload) Connected to instance: ' + active_instance;
+            })
+            .catch((reason) => {
+                status_active_instance.color = 'red';
+                status_active_instance.text = '$(issue-opened) Problem with ' + active_instance + ': ' + reason;
+            });
     } else {
         status_active_instance.color = 'red';
         status_active_instance.text = '$(x) No active instance chosen!';

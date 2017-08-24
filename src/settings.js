@@ -103,7 +103,12 @@ function set_active_instance(){
                     add_new_instance();
                 else if (chosen_instance != undefined || chosen_instance != ''){
                     active_instance = chosen_instance;
-                    vscode.window.showInformationMessage('Selected ' + chosen_instance + ' as active instance.');
+                    vscode.window.showInformationMessage('Selected ' + chosen_instance + ' as active instance.', 'Show settings')
+                        .then((answer) => {
+                            if ((answer) == 'Show settings'){
+                                show_settings();
+                            }
+                        });
                     require('./control.js').set_status_instance_message();
                 }
             });
