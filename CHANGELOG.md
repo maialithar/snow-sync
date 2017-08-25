@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.6.2] - 2017-08-25
+### Fixed
+- statistics are showing also on Linux machine
+- user can only load script includes with no protection policy (`sys_policy=NULL`)
+
 ## [0.6.1] - 2017-08-21
 ### Changed
 - UX improvements
+
 ## [0.6.0] - 2017-08-18
 ### Added
 - option to remove instance

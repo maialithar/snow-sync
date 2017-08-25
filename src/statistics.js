@@ -15,12 +15,16 @@ function get_statistics(){
                     return;
                 }
 
+                setTimeout(() => {
+                    require('./control.js').start();
+                }, 4000);
                 require('./control.js').set_status_message('$(device-camera-video) Previewing statistics...');
-                let uri = vscode.Uri.parse('file:///' + file_name);
+                let uri = vscode.Uri.parse('file:///' + (file_name.startsWith('/') ? file_name.substring(1) : file_name));
                 vscode.commands.executeCommand('vscode.previewHtml', uri);
             });
         })
         .catch((rejected_reason) => {
+            vscode.window.showErrorMessage('Failed getting stats! ' + rejected_reason);
             require('./control.js').set_status_message('$(thumbsdown) Failed...');
         });
 }

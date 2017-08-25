@@ -52,6 +52,13 @@ function get_all_scripts(type, table_name = undefined, fields = 'name,sys_id'){
                 options.path += '&sysparm_query=table%3D' + table_name;
         }
 
+        switch (type){
+            // only get script includes without protection policy
+            case 'Script Include':
+                options.path += '&sysparm_query=sys_policy%3DNULL';
+                break;
+        }
+
         load_settings();
         var req = https.request(options, (res) => {
             if (res.statusCode == '200'){
@@ -118,7 +125,6 @@ function patch(table, sys_id, data, is_script){
 
         load_settings();
         var req = https.request(options);
-
         req.on('error', (e) => {
             reject('Problem with request: ' + e.message);
         });
